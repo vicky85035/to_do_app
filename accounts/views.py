@@ -60,6 +60,7 @@ class SignupAPIView(generics.CreateAPIView):
         username = serializer.validated_data['username']
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
+        
 
         try:
             user = User(username=username, email=email, first_name=full_name[0], last_name=full_name[1])
