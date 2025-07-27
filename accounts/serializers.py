@@ -3,6 +3,8 @@ from accounts.models import User
 from rest_framework.validators import UniqueValidator
 
 class BasicUserserializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = User
         fields = [
@@ -11,7 +13,7 @@ class BasicUserserializer(serializers.ModelSerializer):
             'username',
             'date_joined',
             'email',
-            'profile_picture'
+            'profile_picture',
         ]
 
 class MinimalUserSignupSerializer(serializers.Serializer):

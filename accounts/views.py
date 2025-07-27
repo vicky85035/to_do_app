@@ -34,10 +34,13 @@ class LoginAPIView(generics.GenericAPIView):
                     {'detail': 'Invalid credentials.', "errors": serializer.errors},
                     status=status.HTTP_401_UNAUTHORIZED
                 )
+            
+            token = serializer.validated_data
 
             data = {
                 'user': BasicUserserializer(user).data,
-                'token': serializer.validated_data,
+                'access': token['access'],
+                'refresh': token['refresh'],
             }
 
             return Response(data, status=status.HTTP_200_OK)
@@ -59,9 +62,8 @@ class SignupAPIView(generics.CreateAPIView):
         username = serializer.validated_data.get('username')
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-
-
         name_parts = name.split()
+
         if len(name_parts) == 0:
             first_name = ""
             last_name = ""
