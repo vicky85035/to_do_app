@@ -16,15 +16,7 @@ class BasicUserserializer(serializers.ModelSerializer):
 
 class MinimalUserSignupSerializer(serializers.Serializer):
         name = serializers.CharField(write_only=True, required=True)
-        username = serializers.CharField(
-            required=True,
-            validators=[
-                UniqueValidator(
-                    queryset=User.objects.all(),
-                    message="A user with that username already exists.",
-                )
-            ],
-        )
+        username = serializers.CharField(required=False)
         email = serializers.EmailField(
             required=True,
             validators=[

@@ -1,19 +1,28 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser # Recommended for custom user model
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
-# 1. User Model (Custom User Model is highly recommended for future flexibility)
-# You would typically set AUTH_USER_MODEL = 'yourapp.User' in settings.py
+
 class User(AbstractUser):
-    # Add any additional fields specific to your user profile here
-    # For example, profile picture, phone number, etc.
+    # Make username optional
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        unique=False,
+        blank=True,
+        null=True,
+        help_text=_('Optional username'),
+    )
+
+    email = models.EmailField(_('email address'), unique=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    # Add related_name to avoid clashes if AbstractUser already defines 'groups' or 'user_permissions'
+
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
         blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="custom_user_set", # Custom related_name
+        help_text='The groups this user belongs to.',
+        related_name="custom_user_set",
         related_query_name="custom_user",
     )
     user_permissions = models.ManyToManyField(
@@ -21,12 +30,15 @@ class User(AbstractUser):
         verbose_name='user permissions',
         blank=True,
         help_text='Specific permissions for this user.',
-        related_name="custom_user_set", # Custom related_name
+        related_name="custom_user_set",
         related_query_name="custom_user",
     )
 
+    USERNAME_FIELD = 'email'  # ✅ Login via email
+    REQUIRED_FIELDS = []  # ✅ Don't require username
+
     def __str__(self):
-        return self.username
+        return self.email
 
     @property
     def name(self):

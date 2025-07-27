@@ -13,16 +13,16 @@ class LoginAPIView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
+        email = request.data.get("email")
         password = request.data.get("password")
         # breakpoint()
-        if not username or not password:
+        if not email or not password:
             return Response(
-                {'detail': 'Both username or password are required.'},
+                {'detail': 'Both email or password are required.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        user = authenticate(request, username=username, password=password)
+
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             data = {}
@@ -34,7 +34,7 @@ class LoginAPIView(generics.GenericAPIView):
                     {'detail': 'Invalid credentials.', "errors": serializer.errors},
                     status=status.HTTP_401_UNAUTHORIZED
                 )
-            
+
             data = {
                 'user': BasicUserserializer(user).data,
                 'token': serializer.validated_data,
@@ -45,7 +45,7 @@ class LoginAPIView(generics.GenericAPIView):
             return Response (
                 {'detail': 'Invalid credentails.'}, status=status.HTTP_401_UNAUTHORIZED,
             )
-        
+
 class SignupAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = MinimalUserSignupSerializer
@@ -56,11 +56,10 @@ class SignupAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         name = serializer.validated_data['name']
-        full_name = name.split()
-        username = serializer.validated_data['username']
+        username = serializer.validated_data.get('username')
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-        
+
 
         name_parts = name.split()
         if len(name_parts) == 0:
