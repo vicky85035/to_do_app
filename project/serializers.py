@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from firm.models import Organization, Project, Task, TaskStatus, Tag,  Comment, Attachment, Notification
+from project.models import Organization, Project, Task, TaskStatus, Tag,  Comment, Attachment, Notification
 from accounts.models import User
 from accounts.serializers import BasicUserserializer
 

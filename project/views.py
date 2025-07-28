@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics, filters
-from firm.models import Organization, Project, Task
-from firm.serializers import OrganizationSerializer, ProjectSerializer, TaskSerializer
-from firm.pagination import SetPagination
+from project.models import Organization, Project, Task
+from project.serializers import OrganizationSerializer, ProjectSerializer, TaskSerializer
+from project.pagination import SetPagination
 # Create your views here.
 
 class OrganizationListCreateAPIView(generics.ListCreateAPIView):
@@ -31,3 +31,7 @@ class ProjectRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
 class TaskListCreateAPIView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+    def get(self, request, *args, **kwargs):
+        project = request.query_params.get('project_id')
+        return Task.objects.filter(project_id=project)

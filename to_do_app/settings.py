@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_extensions',
     'accounts',
-    'firm',
+    'project',
 ]
 
 MIDDLEWARE = [

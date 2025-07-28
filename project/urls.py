@@ -1,5 +1,5 @@
 from django.urls import path
-from firm.views import (
+from project.views import (
     OrganizationListCreateAPIView,
     ProjectListCreateAPIView,
     ProjectRetrieveUpdateDestroyAPIView,
