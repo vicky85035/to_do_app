@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from accounts.models import User
 from accounts.serializers import BasicUserserializer, MinimalUserSignupSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 
 class LoginAPIView(generics.GenericAPIView):
@@ -72,19 +73,21 @@ class SignupAPIView(generics.CreateAPIView):
             last_name = ""
         else:
             first_name = name_parts[0]
-            last_name = " ".join(name_parts[1:])
+            last_name = name_parts[1]
 
         try:
             user = User(username=username, email=email, first_name=first_name, last_name=last_name)
 
             user.set_password(password)
             user.save()
+            token = RefreshToken.for_user(user)
+            # breakpoint()
 
             return Response(
                 {
-                    'message': 'User registered successfully!',
-                    'username': user.username,
-                    'email': user.email
+                    'user': BasicUserserializer(user).data,
+                    'refresh': str(token),
+                    'access': str(token.access_token)
                 },
                 status=status.HTTP_201_CREATED,
             )

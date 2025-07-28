@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from firm.models import Organization, Project, Task, TaskStatus, Tag,  Comment, Attachment, Notification
+from accounts.models import User
+from accounts.serializers import BasicUserserializer
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,17 +10,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     client = OrganizationSerializer(read_only=True)
-    # user = serializers.CharField(source='created_projects')
+    created_by = BasicUserserializer(read_only=True)
+    # members = BasicUserserializer(read_only=True, many=True)  
 
     class Meta:
         model = Project
-        fields = ['id', 'name', 'start_date', 'status', 'client', 'members']
+        fields = ['id', 'name', 'client', 'start_date', 'status', 'created_by', 'members']
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    project = serializers.CharField(source='tasks__name')
-    user = serializers.StringRelatedField(source='created_tasks__name')
-
     class Meta:
         model = Task
-        fields = ['id', 'tags', 'projects', 'title', 'user', 'progress', 'assigness', ]
+        fields = ['id', 'title', 'tags', 'description', 'progress', 'assignees', ]
