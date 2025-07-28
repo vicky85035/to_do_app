@@ -3,12 +3,12 @@ from project.views import (
     OrganizationListCreateAPIView,
     ProjectListCreateAPIView,
     ProjectRetrieveUpdateDestroyAPIView,
-    TaskListCreateAPIView,
+    TaskListAPIView,
 )
 
 urlpatterns = [
     path('organization/', OrganizationListCreateAPIView.as_view(), name='oragnization-list-create-apiview'),
-    path('project/', ProjectListCreateAPIView.as_view(), name='project-list-create-apiview'),
-    path('project/<int:pk>/', ProjectRetrieveUpdateDestroyAPIView.as_view(), name='project-retrieve-update-destroy-apiview'),
-    path('task/', TaskListCreateAPIView.as_view(), name='task-list-create-apiview'),
+    path('<int:pk>/', ProjectRetrieveUpdateDestroyAPIView.as_view(), name='project-retrieve-update-destroy-apiview'),
+    path('', ProjectListCreateAPIView.as_view(), name='project-list-create-apiview'),
+    path('task/', TaskListAPIView.as_view(), name='task-list-apiview'),
 ]
