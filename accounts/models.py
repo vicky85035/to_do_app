@@ -71,7 +71,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f"test {self.email}"
+        return self.email
 
     @property
     def name(self):
